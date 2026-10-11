@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Resource Hub</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      color: #243047;
+    }
+
+    header {
+      background: #273c75;
+      color: white;
+      padding: 28px 8%;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+    }
+
+    header p {
+      margin: 0;
+      color: #e0e7ff;
+    }
+
+    main {
+      max-width: 950px;
+      margin: 35px auto;
+      padding: 0 20px;
+    }
+
+    .filter-box, .notes-box {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 22px;
+      box-shadow: 0 3px 14px #0000000d;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      font-size: 16px;
+      background: white;
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .note {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .note h3 {
+      margin-top: 0;
+      color: #273c75;
+    }
+
+    .subject {
+      display: inline-block;
+      background: #e8edff;
+      color: #273c75;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .note p {
+      line-height: 1.5;
+    }
+
+    .empty-message {
+      padding: 20px;
+      background: #fff4e5;
+      border-radius: 8px;
+      text-align: center;
+      color: #854d0e;
+    }
+
+    footer {
+      text-align: center;
+      padding: 22px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Student Resource Hub</h1>
+    <p>Your learning resources, all in one place.</p>
+  </header>
+
+  <main>
+    <section class="filter-box">
+      <h2>Find Study Notes</h2>
+      <p>Filter notes by subject to find the materials you need.</p>
+
+      <label for="subjectFilter">Select Subject</label>
+      <select id="subjectFilter">
+        <option value="All">All Subjects</option>
+        <option value="DBMS">DBMS</option>
+        <option value="Web Development">Web Development</option>
+        <option value="Computer Networks">Computer Networks</option>
+        <option value="Artificial Intelligence">Artificial Intelligence</option>
+      </select>
+    </section>
+
+    <section class="notes-box">
+      <h2>Available Study Notes</h2>
+      <p id="resultCount" aria-live="polite"></p>
+      <div id="notesList" class="notes-grid"></div>
+    </section>
+  </main>
+
+  <footer>
+    Student Resource Hub | Learn • Share • Grow
+  </footer>
+
+  <script>
+    const notes = [
+      {
+        title: "Introduction to DBMS",
+        subject: "DBMS",
+        author: "Student Team",
+        description: "Database concepts, tables, keys and relationships."
+      },
+      {
+        title: "SQL Fundamentals",
+        subject: "DBMS",
+        author: "Student Team",
+        description: "Basic SQL queries, filtering and sorting data."
+      },
+      {
+        title: "HTML and CSS Basics",
+        subject: "Web Development",
+        author: "Student Team",
+        description: "Learn webpage structure, styling and layouts."
+      },
+      {
+        title: "JavaScript Essentials",
+        subject: "Web Development",
+        author: "Student Team",
+        description: "Variables, functions, events and DOM basics."
+      },
+      {
+        title: "Network Fundamentals",
+        subject: "Computer Networks",
+        author: "Student Team",
+        description: "Networking concepts, protocols and topologies."
+      }
+    ];
+
+    const subjectFilter = document.getElementById("subjectFilter");
+    const notesList = document.getElementById("notesList");
+    const resultCount = document.getElementById("resultCount");
+
+    function displayNotes() {
+      const selectedSubject = subjectFilter.value;
+
+      const filteredNotes = selectedSubject === "All"
+        ? notes
+        : notes.filter(note => note.subject === selectedSubject);
+
+      notesList.innerHTML = "";
+
+      resultCount.textContent =
+        filteredNotes.length + (filteredNotes.length === 1
+          ? " note found"
+          : " notes found");
+
+      if (filteredNotes.length === 0) {
+        notesList.innerHTML =
+          '<div class="empty-message">No notes found for this subject. Please try another subject.</div>';
+        return;
+      }
+
+      filteredNotes.forEach(note => {
+        const card = document.createElement("article");
+        card.className = "note";
+
+        const title = document.createElement("h3");
+        title.textContent = note.title;
+
+        const subject = document.createElement("span");
+        subject.className = "subject";
+        subject.textContent = note.subject;
+
+        const description = document.createElement("p");
+        description.textContent = note.description;
+
+        const author = document.createElement("small");
+        author.textContent = "Author: " + note.author;
+
+        card.append(title, subject, description, author);
+        notesList.appendChild(card);
+      });
+    }
+
+    subjectFilter.addEventListener("change", displayNotes);
+    displayNotes();
+  </script>
+</body>
+</html>
